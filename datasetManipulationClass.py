@@ -41,13 +41,14 @@ class DatasetManipulation:
 			raise ValueError
 	
 
+
 	def drop_columns(self, columns)-> None:
-		# Multi Type ^^: 0, '42', [0, 42] (index, name, multi index)
+		# Multi Type ^^: 0, '42', [0, 42] (index, name, multi index) ^^
 		columns_to_drop = []
 		if isinstance(columns, (str, int)):
 			columns = [columns]
 		for col in columns:
-			if isinstance(col, int): # if int, provide columns[i]
+			if isinstance(col, int): # if int, provide df.columns[i] in Pd by default: df['str']
 				columns_to_drop.append(self.df.columns[col])
 			else:
 				columns_to_drop.append(col)
@@ -69,14 +70,14 @@ class DatasetManipulation:
 
 	def encode_column_values(self, column, mapping)-> None:
 		"""
-		Multi Type ^^: 0, 'tumor' (index: int or name: str)
+		Multi Type ^^: 0, 'tumor' (index: int or str) ^^
 		Usage:
 			- df.encode_column('tumor', {'M': 1.0, 'B': 0.0})
 			- df.encode_column(0, {'M': 1.0, 'B': 0.0})
 		"""
 		try:
 			if isinstance(column, int):
-				column = self.df.columns[column]
+				column: str = self.df.columns[column]
 			self.df[column] = self.df[column].map(mapping)
 			print(f" 🔄 Encoded column: '{column}' with mapping: {mapping}")	
 
@@ -106,10 +107,3 @@ class DatasetManipulation:
 		except Exception as e:
 			print(f"❌ Error: {e}")
 			raise
-
-
-
-	# def dataframe_to_numpy(self, df):
-	# 		self.data = self.dataframe_to_numpy(self.df) # Converts to Numpy
-	# 		self.n_samples  = self.data.shape[0]
-	# 		self.n_features = self.data.shape[1]
